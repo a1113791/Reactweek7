@@ -87,15 +87,20 @@ function ProductModal({
           is_enabled: modalData.is_enabled ? 1 : 0,
         },
       });
-    } catch (error) {
-      //alert(error.response.data.message);
       dispatch(
         pushMessage({
-          text: "新增失敗",
+          text: "新增成功",
+          status: "success",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        pushMessage({
+          text: error.response.data.message,
           status: "failed",
         })
       );
-      //throw new Error(error.response.data.message);
+      throw new Error(error.response.data.message);
     }
   };
 
@@ -112,8 +117,19 @@ function ProductModal({
           },
         }
       );
+      dispatch(
+        pushMessage({
+          text: "修改成功",
+          status: "success",
+        })
+      );
     } catch (error) {
-      alert(error.response.data.message);
+      dispatch(
+        pushMessage({
+          text: error.response.data.message,
+          status: "failed",
+        })
+      );
       throw new Error(error.response.data.message);
     }
   };
@@ -125,7 +141,9 @@ function ProductModal({
       getProducts();
       handleCloseProductModal();
     } catch (error) {
-      //alert(error.response.data.message);
+      console.error(error);
+    } finally {
+      handleCloseProductModal();
     }
   };
 
@@ -146,7 +164,12 @@ function ProductModal({
         imageUrl: uploadedImageUrl,
       });
     } catch (error) {
-      alert(error.response.data.message);
+      dispatch(
+        pushMessage({
+          text: error.response.data.message,
+          status: "failed",
+        })
+      );
     }
   };
 

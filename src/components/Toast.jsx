@@ -1,10 +1,13 @@
 import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Toast as BsToast } from "bootstrap";
+import { removeMessage } from "../redux/toastSlice";
 
 export default function Toast() {
   const messages = useSelector((state) => state.toast.messages);
   const toastRefs = useRef({});
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     messages.forEach((message) => {
@@ -13,6 +16,10 @@ export default function Toast() {
       if (toastElement) {
         const toastInstance = new BsToast(toastElement);
         toastInstance.show();
+
+        setTimeout(() => {
+          dispatch(removeMessage(message.id));
+        }, 2000);
       }
     });
   }, [messages]);
